@@ -15,7 +15,6 @@ var roleBuilder = {
 		//if full...
 	    if(creep.store.getFreeCapacity() == 0) {
             var builds = creep.room.find(FIND_CONSTRUCTION_SITES);
-            var upgrades = creep.room.find(FIND_CONSTRUCTION_SITES);
             var fills = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
@@ -38,7 +37,7 @@ var roleBuilder = {
                 creep.memory.harvesting = false;
                 creep.memory.filling = false;
                 creep.memory.upgrading = false;
-            }else if(upgrades.length){
+            }else{
                 //if nothing else upgrade the controller
                 creep.say('⚡ upgrade');
                 creep.memory.building = false;
@@ -47,7 +46,7 @@ var roleBuilder = {
                 creep.memory.upgrading = true;
             }
         }
-
+ 
 		//build
 	    if(creep.memory.building) {
 	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
@@ -61,8 +60,8 @@ var roleBuilder = {
 		//harvest
 	    if(creep.memory.harvesting) {
 	        var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[1], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
 
@@ -82,6 +81,14 @@ var roleBuilder = {
 				}
 			}	
 		}
+
+        //upgrade
+        if(creep.memory.upgrading) {
+            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+        }
+
 	}
 };
 
